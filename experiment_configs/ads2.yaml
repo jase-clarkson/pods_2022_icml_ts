@@ -1,0 +1,75 @@
+---
+seed: 123
+
+dataset:
+  data_generation:
+    problem: 'ads2'
+    T: [3000]
+  feature_labels:
+    model_type: ['univariate']
+    n_lags: [3]
+
+experiment:
+  test_start: 2975
+  validation_len: 100
+  update_period: 25
+  ncpu: 12
+  num_rep_per_cpu: 16
+  output_dir: 'data/experiments'
+
+model_args:
+  # Note: only put one value for name on lower args. Will include multiple lower modules
+  # in the future.
+  lower_args:
+    name: ['WLSGD']
+    reg_lower: [0, 0.001, 0.0001, 0.00001, 0.000001 ]
+    bias: [ False ]
+  upper_args:
+    reg_upper: [ 0 ]
+  training_args:
+    batch_size: [ 32 ]
+    n_epochs: [ 50 ]
+    clip_grad: [ 1 ]
+    n_restarts: [ 5 ]
+  opt_args:
+    opt: [ 'SGD' ]
+    lr: [ 0.1 ]
+    momentum: [ 0.9 ]
+  scheme_args:
+    name: [ 'ExpDecay', 'MixedDecay' ]
+
+baselines:
+  - model: ['DBFLinear']
+    s: [20]
+    n_iter: [5]
+    lambda_: [1]
+    lambda_1: 'reg_weight_list'
+    lambda_2: 'reg_weight_list'
+  - model: ['WLSLinear']
+    alpha: 'alpha_list'
+    reg_weight: 'reg_weight_list'
+  - model: ['StationaryLinear']
+    reg_weight: 'reg_weight_list'
+  - model: ['SlidingLinear']
+    lookback: 'lookback_list'
+    reg_weight: 'reg_weight_list'
+  - model: ['PowerLinear']
+    power: 'power_list'
+    reg_weight: 'reg_weight_list'
+  - model: ['HingeLinear']
+    coef: 'coef_list'
+    reg_weight: 'reg_weight_list'
+  - model: ['StateSpace']
+  - model: ['Arima']
+    p: [0, 1, 2]
+    d: [0, 1, 2]
+    q: [0, 1, 2]
+    trend: ['n']
+
+model_shared_params:
+  reg_weight_list:
+    log_reg_weight_bounds: [-6, -3]
+    n_values: 4
+  lookback_list:
+    lb: 5
+    n_values: 25
