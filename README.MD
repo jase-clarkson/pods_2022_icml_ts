@@ -2,6 +2,8 @@
 This repository contains the code to reproduce the experiments in the paper "Time Series Prediction under Distribution 
 Shift using Differentiable Forgetting" submitted to the 
 ICML 2022 PODS workshop https://sites.google.com/view/icml-2022-pods.
+The paper can be found in this repo under the filename "ICML_PODS_FINAL.pdf"
+
 ## Usage
 Experiments can be run using
 
